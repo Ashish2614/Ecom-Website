@@ -1,4 +1,8 @@
 import React from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import "swiper/css";
+import { Autoplay } from 'swiper/modules'
+
 import Services from '../Components/Services'
 import Offers from '../Components/Offers'
 import Products from '../Components/Products'
@@ -7,40 +11,56 @@ import ProductSlider from '../Components/ProductSlider'
 import BestSellerProduct from '../Components/BestSellerProduct'
 
 export default function HomePage() {
+  let sliderOptions = {
+    loop: true,
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false,
+    },
+    modules: [Autoplay]
+
+  }
   return (
     <>
       <div className="container-fluid carousel bg-light px-0">
         <div className="row g-0 justify-content-end">
           <div className="col-12 col-lg-7 col-xl-9">
-            <div className="header-carousel owl-carousel bg-light py-5">
-              <div className="row g-0 header-carousel-item align-items-center">
-                <div className="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                  <img src="img/carousel-1.png" className="img-fluid w-100" alt="Image" />
-                </div>
-                <div className="col-xl-6 carousel-content p-4">
-                  <h4 className="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
-                    style={{ letterspacing: "3px" }}>Save Up To A $400</h4>
-                  <h1 className="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">On Selected
-                    Laptops & Desktop Or Smartphone</h1>
-                  <p className="text-dark wow fadeInRight" data-wow-delay="0.5s">Terms and Condition Apply</p>
-                  <a className="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
-                    href="#">Shop Now</a>
-                </div>
-              </div>
-              <div className="row g-0 header-carousel-item align-items-center">
-                <div className="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                  <img src="img/carousel-2.png" className="img-fluid w-100" alt="Image" />
-                </div>
-                <div className="col-xl-6 carousel-content p-4">
-                  <h4 className="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
-                    style={{ letterspacing: "3px" }}>Save Up To A $200</h4>
-                  <h1 className="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">On Selected
-                    Laptops & Desktop Or Smartphone</h1>
-                  <p className="text-dark wow fadeInRight" data-wow-delay="0.5s">Terms and Condition Apply</p>
-                  <a className="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
-                    href="#">Shop Now</a>
-                </div>
-              </div>
+            <div className="header-carousel bg-light py-5">
+              <Swiper {...sliderOptions}>
+                <SwiperSlide>
+                  <div className="row g-0 header-carousel-item align-items-center">
+                    <div className="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
+                      <img src="img/carousel-1.png" className="img-fluid w-100" alt="Image" />
+                    </div>
+                    <div className="col-xl-6 carousel-content p-4">
+                      <h4 className="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
+                        style={{ letterspacing: "3px" }}>Save Up To A $400</h4>
+                      <h1 className="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">On Selected
+                        Laptops & Desktop Or Smartphone</h1>
+                      <p className="text-dark wow fadeInRight" data-wow-delay="0.5s">Terms and Condition Apply</p>
+                      <a className="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
+                        href="#">Shop Now</a>
+                    </div>
+                  </div>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <div className="row g-0 header-carousel-item align-items-center">
+                    <div className="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
+                      <img src="img/carousel-2.png" className="img-fluid w-100" alt="Image" />
+                    </div>
+                    <div className="col-xl-6 carousel-content p-4">
+                      <h4 className="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
+                        style={{ letterspacing: "3px" }}>Save Up To A $200</h4>
+                      <h1 className="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">On Selected
+                        Laptops & Desktop Or Smartphone</h1>
+                      <p className="text-dark wow fadeInRight" data-wow-delay="0.5s">Terms and Condition Apply</p>
+                      <a className="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
+                        href="#">Shop Now</a>
+                    </div>
+                  </div>
+
+                </SwiperSlide>
+              </Swiper>
             </div>
           </div>
           <div className="col-12 col-lg-5 col-xl-3 wow fadeInRight" data-wow-delay="0.1s">

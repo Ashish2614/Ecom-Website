@@ -1,97 +1,110 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Navbar() {
+  let [settingData, setSettingData] = useState({
+    siteName: import.meta.env.VITE_APP_SITE_NAME,
+    map1: import.meta.env.VITE_APP_MAP1,
+    address: import.meta.env.VITE_APP_ADDRESS,
+    email: import.meta.env.VITE_APP_EMAIL,
+    phone: import.meta.env.VITE_APP_PHONE,
+    whatsapp: import.meta.env.VITE_APP_WHATSAPP,
+    facebook: import.meta.env.VITE_APP_FACEBOOK,
+    twitter: import.meta.env.VITE_APP_TWITTER,
+    instagram: import.meta.env.VITE_APP_INSTAGRM,
+    linkedin: import.meta.env.VITE_APP_LINKEDIN,
+    youtube: import.meta.env.VITE_APP_YOUTUBE,
+  })
   return (
     <>
-      <div className="container-fluid px-5 d-none border-bottom d-lg-block">
+      <div className="container-fluid px-5 border-bottom">
         <div className="row gx-0 align-items-center">
-          <div className="col-lg-4 text-center text-lg-start mb-lg-0">
-            <div className="d-inline-flex align-items-center" style={{ height: "45px" }}>
-              <a href="#" className="text-muted me-2"> Help</a><small> / </small>
-              <a href="#" className="text-muted mx-2"> Support</a><small> / </small>
-              <a href="#" className="text-muted ms-2"> Contact</a>
+          <div className="col-lg-7 col-6 text-center d-flex align-items-center justify-content-center">
+            <a href={settingData.map1} target='_blank' className=" d-flex m-2">
+              <i className='me-1 bi bi-geo-alt'></i>
+              <span className='d-none d-xl-inline-block'>{settingData.address}</span>
+            </a>
+            <a href={`mailto:${settingData.email}`} target='_blank' className=" d-flex m-2">
+              <i className='me-1 bi bi-envelope'></i>
+              <span className='d-none d-xl-inline-block'>{settingData.email}</span>
+            </a>
+            <a href={`tel:${settingData.phone}`} target='_blank' className=" d-flex m-2">
+              <i className='me-1 bi bi-telephone'></i>
+              <span className='d-none d-xl-inline-block'>{settingData.phone}</span>
+            </a>
+            <a href={`https://wa.me/${settingData.whatsapp}`} target='_blank' className=" d-flex m-2">
+              <i className='me-1 bi bi-whatsapp'></i>
+              <span className='d-none d-xl-inline-block'>{settingData.whatsapp}</span>
+            </a>
+          </div>
 
+          <div className="col-lg-5 col-6 text-center text-lg-end">
+            <div className="d-inline-flex align-items-center" style={{ height: "45px" }}>
+
+              <a href={settingData.facebook} target='_blank' className="dropdown-item"><i className=' bi bi-facebook'></i>
+              </a>
+              <a href={settingData.twitter} target='_blank' className="dropdown-item"><i className='bi bi-twitter'></i>
+              </a>
+              <a href={settingData.instagram} target='_blank' className="dropdown-item"><i className='bi bi-instagram'></i>
+              </a>
+              <a href={settingData.linkedin} target='_blank' className="dropdown-item"><i className='bi bi-linkedin'></i>
+              </a>
+              <a href={settingData.youtube} target='_blank' className="dropdown-item"><i className='bi bi-youtube'></i>
+              </a>
+
+              <div className="dropdown-menu rounded">
+                <a href="#" className="dropdown-item"> Euro</a>
+                <a href="#" className="dropdown-item"> Dolar</a>
+              </div>
             </div>
-          </div>
-          <div className="col-lg-4 text-center d-flex align-items-center justify-content-center">
-            <small className="text-dark">Call Us:</small>
-            <a href="#" className="text-muted">(+012) 1234 567890</a>
-          </div>
 
-          <div className="col-lg-4 text-center text-lg-end">
-            <div className="d-inline-flex align-items-center" style={{ height: "45px" }}>
-              <div className="dropdown">
-                <a href="#" className="dropdown-toggle text-muted me-2" data-bs-toggle="dropdown"><small>
-                  USD</small></a>
-                <div className="dropdown-menu rounded">
-                  <a href="#" className="dropdown-item"> Euro</a>
-                  <a href="#" className="dropdown-item"> Dolar</a>
-                </div>
-              </div>
-              <div className="dropdown">
-                <a href="#" className="dropdown-toggle text-muted mx-2" data-bs-toggle="dropdown"><small>
-                  English</small></a>
-                <div className="dropdown-menu rounded">
-                  <a href="#" className="dropdown-item"> English</a>
-                  <a href="#" className="dropdown-item"> Turkish</a>
-                  <a href="#" className="dropdown-item"> Spanol</a>
-                  <a href="#" className="dropdown-item"> Italiano</a>
-                </div>
-              </div>
-              <div className="dropdown">
-                <a href="#" className="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
-                  className="fa fa-home me-2"></i> My Dashboard</small></a>
-                <div className="dropdown-menu rounded">
-                  <a href="#" className="dropdown-item"> Login</a>
-                  <a href="#" className="dropdown-item"> Wishlist</a>
-                  <a href="#" className="dropdown-item"> My Card</a>
-                  <a href="#" className="dropdown-item"> Notifications</a>
-                  <a href="#" className="dropdown-item"> Account Settings</a>
-                  <a href="#" className="dropdown-item"> My Account</a>
-                  <a href="#" className="dropdown-item"> Log Out</a>
-                </div>
+            <div className="dropdown">
+              <a href="#" className="dropdown-toggle  ms-2" data-bs-toggle="dropdown"><small><i
+                className="fa fa-home me-2"></i> AK Tripathi</small></a>
+              <div className="dropdown-menu rounded">
+                <Link to='/profilez?otion=profile' className="dropdown-item"> Profile</Link>
+                <Link to='/profilez?otion=profile' className="dropdown-item"> Admin Dashboard</Link>
+                <Link to='/profilez?otion=wishlist' className="dropdown-item"> Wishlist</Link>
+                <Link to='/profilez?otion=orders' className="dropdown-item"> Orders</Link>
+                <Link to='/profilez?otion=adress' className="dropdown-item"> Address</Link>
+                <Link to='/cart' className="dropdown-item"> Cart</Link>
+                <Link to='/checkout' className="dropdown-item"> Checkout</Link>
+                <button className="dropdown-item"> Log Out</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div className="container-fluid px-5 py-4 d-none d-lg-block">
         <div className="row gx-0 align-items-center text-center">
           <div className="col-md-4 col-lg-3 text-center text-lg-start">
             <div className="d-inline-flex align-items-center">
-              <a href="" className="navbar-brand p-0">
+              <Link to="/" className="navbar-brand p-0">
                 <h1 className="display-5 text-primary m-0"><i
-                  className="fas fa-shopping-bag text-secondary me-2"></i>Electro</h1>
+                  className="bi bi-bag-check text-secondary me-2"></i>{settingData.siteName}</h1>
 
-              </a>
+              </Link>
             </div>
           </div>
           <div className="col-md-4 col-lg-6 text-center">
             <div className="position-relative ps-4">
               <div className="d-flex border rounded-pill">
-                <input className="form-control border-0 rounded-pill w-100 py-3" type="text"
+                <input className="form-control border-primary  w-100 py-3" style={{ borderRadius: "30px 0 0 30px" }} type="text"
                   data-bs-target="#dropdownToggle123" placeholder="Search Looking For?" />
-                <select className="form-select text-dark border-0 border-start rounded-0 p-3" style={{ width: "200px" }}>
-                  <option value="All Category">All Category</option>
-                  <option value="Pest Control-2">Category 1</option>
-                  <option value="Pest Control-3">Category 2</option>
-                  <option value="Pest Control-4">Category 3</option>
-                  <option value="Pest Control-5">Category 4</option>
-                </select>
-                <button type="button" className="btn btn-primary rounded-pill py-3 px-5" style={{ border: "0" }}><i
+
+                <button type="button" className="btn btn-primary  py-3 px-5" style={{ borderRadius: "0 30px 30px 0" }}><i
                   className="fas fa-search"></i></button>
               </div>
             </div>
           </div>
           <div className="col-md-4 col-lg-3 text-center text-lg-end">
             <div className="d-inline-flex align-items-center">
-              <a href="#" className="text-muted d-flex align-items-center justify-content-center me-3"><span
-                className="rounded-circle btn-md-square border"><i className="fas fa-random"></i></span></a>
-              <a href="#" className="text-muted d-flex align-items-center justify-content-center me-3"><span
-                className="rounded-circle btn-md-square border"><i className="fas fa-heart"></i></span></a>
-              <a href="#" className="text-muted d-flex align-items-center justify-content-center"><span
-                className="rounded-circle btn-md-square border"><i className="fas fa-shopping-cart"></i></span>
-                <span className="text-dark ms-2">$0.00</span></a>
+              <Link to="/profile?wishlist" className=" d-flex m-2 align-items-center justify-content-center me-3"><span
+                className=""><i className="fas fa-heart"></i> Wishlist </span></Link>
+              <Link to="/cart" className=" d-flex m-2 align-items-center justify-content-center"><span
+                className=""><i className="fas fa-shopping-cart"></i> Cart </span>
+                <span className="text-dark ms-2"></span></Link>
             </div>
           </div>
         </div>
@@ -103,7 +116,7 @@ export default function Navbar() {
             <nav className="navbar navbar-light position-relative" style={{ width: "250px" }}>
               <button className="navbar-toggler border-0 fs-4 w-100 px-0 text-start" type="button"
                 data-bs-toggle="collapse" data-bs-target="#allCat">
-                <h4 className="m-0"><i className="fa fa-bars me-2"></i>All Categories</h4>
+                <h4 className="m-0 text-light"><i className="fa fa-bars me-2"></i>Categories</h4>
               </button>
               <div className="collapse navbar-collapse rounded-bottom" id="allCat">
                 <div className="navbar-nav ms-auto py-0">
@@ -145,32 +158,37 @@ export default function Navbar() {
           </div>
           <div className="col-12 col-lg-9">
             <nav className="navbar navbar-expand-lg navbar-light bg-primary ">
-              <a href="" className="navbar-brand d-block d-lg-none">
-                <h1 className="display-5 text-secondary m-0"><i
-                  className="fas fa-shopping-bag text-white me-2"></i>Electro</h1>
+              <Link to="/" className="navbar-brand d-block d-lg-none">
+                <h1 className="display-5 text-light m-0"><i
+                  className="bi bi-bag check text-white me-2"></i>{settingData.siteName}</h1></Link>
 
-              </a>
               <button className="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
                 <span className="fa fa-bars fa-1x"></span>
               </button>
               <div className="collapse navbar-collapse" id="navbarCollapse">
                 <div className="navbar-nav ms-auto py-0">
-                  <a href="index.html" className="nav-item nav-link active">Home</a>
-                  <a href="shop.html" className="nav-item nav-link">Shop</a>
-                  <a href="single.html" className="nav-item nav-link">Single Page</a>
+                  <Link to="/" className="nav-item nav-link text-light ">Home</Link>
+                  <Link to="/about" className="nav-item nav-link text-light ">About</Link>
+                  <Link to="/shop" className="nav-item nav-link text-light ">Shop</Link>
+                  <Link to="/feature" className="nav-item nav-link text-light ">Feature</Link>
+                  <Link to="/testimonial" className="nav-item nav-link text-light ">Testimonial</Link>
+                  <Link to="/faq" className="nav-item nav-link text-light ">Faq</Link>
+                  <Link to="/contact" className="nav-item nav-link text-light ">Contact Us</Link>
+                  <Link to="/admin" className="nav-item nav-link text-light ">Admin</Link>
+
                   <div className="nav-item dropdown">
                     <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                    <div className="dropdown-menu m-0">
+                    {/* <div className="dropdown-menu m-0">
                       <a href="bestseller.html" className="dropdown-item">Bestseller</a>
                       <a href="cart.html" className="dropdown-item">Cart Page</a>
                       <a href="cheackout.html" className="dropdown-item">Cheackout</a>
                       <a href="404.html" className="dropdown-item">404 Page</a>
-                    </div>
+                    </div> */}
                   </div>
-                  <a href="contact.html" className="nav-item nav-link me-2">Contact</a>
+                  <a href="contact.html" className="nav-item nav-link  me-2">Contact</a>
                   <div className="nav-item dropdown d-block d-lg-none mb-3">
-                    <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">All Category</a>
+                    <a href="#" className="nav-link text-light dropdown-toggle text-light" data-bs-toggle="dropdown">Category</a>
                     <div className="dropdown-menu m-0">
                       <ul className="list-unstyled categories-bars">
                         <li>
@@ -207,8 +225,6 @@ export default function Navbar() {
                     </div>
                   </div>
                 </div>
-                <a href="" className="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i
-                  className="fa fa-mobile-alt me-2"></i> +0123 456 7890</a>
               </div>
             </nav>
           </div>
