@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import Breadcrum from '../../Components/Breadcrum'
 import AdminSidebar from '../../Components/Admin/AdminSidebar'
 import TextValidators from '../../FormValidators/TextValidators'
 import ImageValidators from '../../FormValidators/ImageValidators'
 
-export default function AdminMaincategoryCreatePage() {
+export default function AdminMainCategoryUpdatePage() {
+  let { id } = useParams()
   let [data, setData] = useState({
     name: "",
     pic: "",
     status: true
   })
   let [errorMessage, setErrorMessage] = useState({
-    name: "Name Field is Mendatory",
-    pic: 'Pic Field is Mendatory'
+    name: "",
+    pic: ""
   })
   let [show, setShow] = useState(false)
 
@@ -37,14 +38,14 @@ export default function AdminMaincategoryCreatePage() {
     if (error)
       setShow(true)
     else {
-      let item = MaincategoryStateData.find(trash => trash.name?.toLocaleLowerCase() === data.name?.toLocaleLowerCase())
+      let item = MaincategoryStateData.find(trash => trash.id !== id && trash.name?.toLocaleLowerCase() === data.name?.toLocaleLowerCase())
       if (item) {
         setErrorMessage({ ...errorMessage, name: "Maincategory with this name Already Exist" })
         setShow(true)
         return
       }
       let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
-        method: "POST",
+        method: "PUT",
         headers: {
           "contect-type": "application/json"
         },
@@ -66,9 +67,15 @@ export default function AdminMaincategoryCreatePage() {
         },
       })
       response = await response.json()
+      let item = response.find(trash => trash.id == id)
+      if (item)
+        setData({ ...data, ...item })
+      else
+        navigate("/admin/maincategory")
+
       setMaincategoryStateData(response)
 
-      // response = await response.json()
+      response = await response.json()
     })()
   }, [])
 
@@ -86,19 +93,19 @@ export default function AdminMaincategoryCreatePage() {
               <div className="row">
                 <div className="col-12 mb-3">
                   <label>Name*</label>
-                  <input type="text" name="name" onChange={getInputData} placeholder='Maincategory Name' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-primary'}`} />
+                  <input type="text" name="name" value={data.name} onChange={getInputData} placeholder='Maincategory Name' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-primary'}`} />
                   {show && errorMessage.name ? <p className='text-danger text-capitalize'>{errorMessage.name}</p> : null}
                 </div>
 
                 <div className="col-md-6 mb-3">
-                  <label>Pic*</label>
+                  <label>Pic</label>
                   <input type="file" name="pic" onChange={getInputData} className={`form-control ${show && errorMessage.pic ? 'border-danger' : 'border-primary'}`} />
                   {show && errorMessage.pic ? <p className='text-danger text-capitalize'>{errorMessage.pic}</p> : null}
                 </div>
 
                 <div className="col-md-6 mb-3">
                   <label>Status</label>
-                  <select name="status" onChange={getInputData} className='form-select border-primary'>
+                  <select name="status" value={data.status ? "1" : "0"} onChange={getInputData} className='form-select border-primary'>
                     <option value="1">Active</option>
                     <option value="0">Inactive</option>
                   </select>

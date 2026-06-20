@@ -22,6 +22,7 @@ import AdminHomePages from './Pages/Admin/AdminHomePage'
 import AdminMainCategoryPages from './Pages/MainCategory/AdminMainCategoryPage'
 import AdminMaincategoryCreatePage from './Pages/MainCategory/AdminMainCategoryCreatePage'
 import AdminMaincategoryPage from './Pages/MainCategory/AdminMainCategoryPage'
+import AdminMaincategoryUpdatePage from './Pages/MainCategory/AdminMainCategoryUpdatePage'
 
 export default function App() {
   return (
@@ -53,6 +54,7 @@ export default function App() {
         <Route path='/admin' element={<AdminHomePages />} />
         <Route path='/admin/maincategory' element={<AdminMaincategoryPage />} />
         <Route path='/admin/maincategory/create' element={<AdminMaincategoryCreatePage />} />
+        <Route path='/admin/maincategory/update:id' element={<AdminMaincategoryUpdatePage />} />
 
 
       </Routes>
