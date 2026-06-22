@@ -7,40 +7,32 @@ import AdminSidebar from '../../Components/Admin/AdminSidebar'
 import "datatables.net-dt/css/dataTables.dataTables.min.css"
 import DataTable from 'datatables.net-dt'
 
+import { getMaincategory, deleteMaincategory } from "../../Redux/ActionCreators/MaincategoryActionCreators"
+import { useDispatch, useSelector } from 'react-redux'
+
 export default function AdminMaincategoryPage() {
   let [data, setData] = useState([])
-  let [MaincategoryStateData, setMaincategoryStateData] = useState([])
 
-  async function deleteRecord(id) {
+  let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
+  let dispatch = useDispatch()
+
+  function deleteRecord(id) {
     if (window.confirm("Are You Sure You want to delete this record")) {
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory/${id}`, {
-        method: "DELETE",
-        headers: {
-          "contect-type": "application/json"
-        }
-      })
-      response = await response.json()
-      setData(data.filter(trash => trash.id !== id))
+
+      dispatch(deleteMaincategory({ id: id }))
+      setData(data.filter(x => x.id !== id))
     }
   }
   useEffect(() => {
-    let time = (async () => {
-
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
-        method: "GET",
-        headers: {
-          "contect-type": "application/json"
-        },
-      })
-      response = await response.json()
-      setData(response)
-      setMaincategoryStateData(response)
-
-      return setTimeout(() => new DataTable('#myTable'), 500)
-      // response = await response.json()
+    let time = (() => {
+      dispatch(getMaincategory())
+      if (MaincategoryStateData.length) {
+        setData(MaincategoryStateData)
+        return setTimeout(() => new DataTable('#myTable'), 500)
+      }
     })()
     return () => clearTimeout(time)
-  }, [])
+  }, [MaincategoryStateData.length])
   return (
     <>
       <Breadcrum title="Admin" />

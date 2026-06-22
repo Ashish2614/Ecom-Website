@@ -5,6 +5,7 @@ import Breadcrum from '../../Components/Breadcrum'
 import AdminSidebar from '../../Components/Admin/AdminSidebar'
 import TextValidators from '../../FormValidators/TextValidators'
 import ImageValidators from '../../FormValidators/ImageValidators'
+import { getMainCategory, updateMainCategory } from '../../Redux/ActionCreators/MaincategoryActionCreators'
 
 export default function AdminMainCategoryUpdatePage() {
   let { id } = useParams()
@@ -19,7 +20,8 @@ export default function AdminMainCategoryUpdatePage() {
   })
   let [show, setShow] = useState(false)
 
-  let [MaincategoryStateData, setMaincategoryStateData] = useState([])
+  let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
+  let dispatch = useDispatch()
   let navigate = useNavigate()
 
 
@@ -44,40 +46,32 @@ export default function AdminMainCategoryUpdatePage() {
         setShow(true)
         return
       }
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
-        method: "PUT",
-        headers: {
-          "contect-type": "application/json"
-        },
-        body: JSON.stringify({ ...data })
-      })
-      response = await response.json()
+      dispatchEvent(updateMainCategory({ ...data }))
+
+      // let formData = new FormData()
+      // formData.append("id", data.id)
+      // formData.append("name", data.name)
+      // formData.append("pic", data.pic)
+      // formData.append("status", data.status)
+      // dispatchEvent(createMainCategory(formData))
+
       navigate("/admin/maincategory")
     }
   }
 
 
   useEffect(() => {
-    (async () => {
-
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
-        method: "GET",
-        headers: {
-          "contect-type": "application/json"
-        },
-      })
-      response = await response.json()
-      let item = response.find(trash => trash.id == id)
-      if (item)
-        setData({ ...data, ...item })
-      else
-        navigate("/admin/maincategory")
-
-      setMaincategoryStateData(response)
-
-      response = await response.json()
+    (() => {
+      dispatch(getMainCategory())
+      if (MaincategoryStateData.length) {
+        let item = MaincategoryStateData.find(x => x.id == id)
+        if (item)
+          setData({ ...data, ...item })
+        else
+          navigate("/admin/maincategory")
+      }
     })()
-  }, [])
+  }, [MaincategoryStateData.length])
 
   return (
     <>
