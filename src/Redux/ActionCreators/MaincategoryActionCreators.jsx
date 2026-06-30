@@ -8,10 +8,9 @@ export function createMainCategory(data) {
   }
 }
 
-export function getMainCategory(data) {
+export function getMainCategory() {
   return {
-    type: GET_MAINCATEGORY,
-    payload: data
+    type: GET_MAINCATEGORY
   }
 }
 

@@ -9,6 +9,8 @@ import ImageValidators from '../../FormValidators/ImageValidators'
 
 import { updateMainCategory, getMainCategory } from '../../Redux/ActionCreators/MaincategoryActionCreators'
 
+import { createMainCategory } from '../../Redux/ActionCreators/MaincategoryActionCreators'
+
 export default function AdminMaincategoryCreatePage() {
   let [data, setData] = useState({
     name: "",
@@ -47,7 +49,7 @@ export default function AdminMaincategoryCreatePage() {
         setShow(true)
         return
       }
-      dispatchEvent(createMainCategory({ ...data }))
+      dispatch(createMainCategory({ ...data }))
 
       // let formData = new FormData()
       // formData.append("name", data.name)
@@ -62,7 +64,7 @@ export default function AdminMaincategoryCreatePage() {
 
   useEffect(() => {
 
-    dispatchEvent(getMainCategory())
+    dispatch(getMainCategory())
   }, [MaincategoryStateData.length])
 
   return (

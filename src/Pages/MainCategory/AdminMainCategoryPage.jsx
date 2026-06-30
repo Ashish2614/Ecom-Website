@@ -7,7 +7,8 @@ import AdminSidebar from '../../Components/Admin/AdminSidebar'
 import "datatables.net-dt/css/dataTables.dataTables.min.css"
 import DataTable from 'datatables.net-dt'
 
-import { getMaincategory, deleteMaincategory } from "../../Redux/ActionCreators/MaincategoryActionCreators"
+import { getMainCategory, deleteMainCategory } from '../../Redux/ActionCreators/MaincategoryActionCreators'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 export default function AdminMaincategoryPage() {
@@ -19,13 +20,15 @@ export default function AdminMaincategoryPage() {
   function deleteRecord(id) {
     if (window.confirm("Are You Sure You want to delete this record")) {
 
-      dispatch(deleteMaincategory({ id: id }))
+      dispatch(deleteMainCategory({ id: id }))
       setData(data.filter(x => x.id !== id))
     }
   }
+
   useEffect(() => {
     let time = (() => {
-      dispatch(getMaincategory())
+      dispatch(getMainCategory())
+
       if (MaincategoryStateData.length) {
         setData(MaincategoryStateData)
         return setTimeout(() => new DataTable('#myTable'), 500)
@@ -58,12 +61,14 @@ export default function AdminMaincategoryPage() {
 
                 <tbody>
                   {data.map(item => {
+
                     return <tr key={item.id}>
                       <td>{item.id}</td>
                       <td>{item.name}</td>
                       <td>
-                        <Link to={`${import.meta.VITE_APP_IMAGE_SERVER}${item.pic}`} target='_blank'></Link>
-                        <img src={`${import.meta.VITE_APP_IMAGE_SERVER}${item.pic}`} height={60} width={80} alt="" />
+
+                        <Link to={`${import.meta.env.VITE_APP_IMAGE_SERVER}${item.pic}`} target='_blank'></Link>
+                        <img src={`${import.meta.env.VITE_APP_IMAGE_SERVER}${item.pic}`} height={60} width={80} alt="" />
                       </td>
                       <td>{item.status ? "Active" : "Inactive"}</td>
                       <td><Link to={`/admin/maincategory/update${item.id}`} className='btn btn-primary'><i className='bi bi-pencil-square'></i></Link></td>
