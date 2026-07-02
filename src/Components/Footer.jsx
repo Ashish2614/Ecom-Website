@@ -1,7 +1,9 @@
 // import React from 'react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { getSetting } from "../Redux/ActionCreators/SettingActionCreators"
 
 export default function Footer() {
   let [settingData, setSettingData] = useState({
@@ -17,6 +19,21 @@ export default function Footer() {
     linkedin: import.meta.env.VITE_APP_LINKEDIN,
     youtube: import.meta.env.VITE_APP_YOUTUBE,
   })
+  let SettingStateData = useSelector(state => state.SettingStateData)
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    (() => {
+      dispatch(getSetting())
+      if (SettingStateData.length)
+        setSettingData(() => {
+          let item = {}
+          Object.keys(settingData).map(key => item[key] = SettingStateData[0][key] || settingData[key])
+          return item
+        })
+    })()
+  }, [SettingStateData.length])
+
   return (
     <>
       <div className="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">

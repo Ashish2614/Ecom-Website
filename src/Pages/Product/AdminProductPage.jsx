@@ -79,11 +79,12 @@ export default function AdminProductdPage() {
                       <td>{item.subcategory}</td>
                       <td>{item.brand}</td>
                       <td>{item.color?.join()}</td>
+                      <td>{item.size?.join()}</td>
                       <td>&#8377;{item.basePrice}</td>
                       <td>{item.discount}%off</td>
                       <td>&#8377;{item.finalPrice}</td>
                       <td>{item.stock ? "In stock" : "Out of Stock"}</td>
-                      <td>{item.stockQunatity}</td>
+                      <td>{item.stockQuantity}</td>
                       <td>
                         <div style={{ width: 400 }}>
                           {item.pic?.map((p, index) => {
@@ -92,8 +93,8 @@ export default function AdminProductdPage() {
                             </Link>
                           })}
                         </div>
-
                       </td>
+
                       <td>{item.status ? "Active" : "Inactive"}</td>
                       <td><Link to={`/admin/product/update${item.id}`} className='btn btn-primary'><i className='bi bi-pencil-square'></i></Link></td>
                       <td><button className='btn btn-danger' onClick={() => deleteRecord(item.id)}><i className='bi bi-trash'></i></button></td>
