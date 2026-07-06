@@ -27,7 +27,6 @@ export default function AdminMaincategoryCreatePage() {
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
-
   function getInputData(e) {
     let name = e.target.name
     let value = name === "pic" ? "maincategory/" + e.target.files[0].name : e.target.value
@@ -60,7 +59,6 @@ export default function AdminMaincategoryCreatePage() {
       navigate("/admin/maincategory")
     }
   }
-
 
   useEffect(() => {
 

@@ -53,7 +53,7 @@ export default function About() {
             </div>
           </div>
           <div className="col-md-6">
-            <img src="/images/banner1.jpg" className='img-fluid w-100' alt="" />
+            <img src="public/img/banner7.jpg" className='img-fluid w-100' alt="" />
           </div>
         </div>
       </div>
