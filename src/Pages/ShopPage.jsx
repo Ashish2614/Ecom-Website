@@ -17,118 +17,298 @@ import { getBrand } from "../Redux/ActionCreators/BrandActionCreators"
 import { getProduct } from "../Redux/ActionCreators/ProductActionCreators"
 import { useDispatch, useSelector } from 'react-redux'
 
+import Breadcrum from '../Components/Breadcrum'
+
+import SingleProduct from '../Components/SingleProduct'
+import SingleProduct2 from '../Components/SingleProduct2'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay } from 'swiper/modules';
 import "swiper/css";
 
+const colors = ["Black", "White", "Blue", "Red", "Green", "Gray", "Pink", "Yellow", "Megenta", "Purple", "Orange", "N/A"]
+const sizes = ["XXL", "XL", "L", "MD", "SM", "XS", "NB", "22", "24", "26", "28", "30", "32", "34", "36", "38", "40", "N/A"]
 
-
-export default function HomePage() {
-  let [maincategory, setMaincategory] = useState([])
-
-  let sliderOptions = {
-    loop: true,
-    autoplay: {
-      delay: 2000,
-      disableOnInteraction: false
-    },
-    modules: [Autoplay]
-  }
-  let [data, setData] = useState({ pic: [] })
-
+export default function ShopPage() {
   let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
+  let SubcategoryStateData = useSelector(state => state.SubcategoryStateData)
+  let BrandStateData = useSelector(state => state.BrandStateData)
   let ProductStateData = useSelector(state => state.ProductStateData)
+
+  let [page, setPage] = useState(1)
+  let [startIndex, setStartIndex] = useState(0)
+  let [endIndex, setEndIndex] = useState(0)
+  let [totalProducts, setTotalProducts] = useState(0)
+
+  let [selected, setSelected] = useState({
+    maincategory: [],
+    subcategory: [],
+    brand: [],
+    color: [],
+    size: [],
+  })
+  let [data, setData] = useState([])
+  let [sortFilter, setSortFilter] = useState("No Sort")
+  let [search, setSearch] = useState("")
+  let [min, setMin] = useState(-1)
+  let [max, setMax] = useState(-1)
+
   let dispatch = useDispatch()
 
+  function getInputSelected(key, value) {
+    let arr = selected[key]
+    if (arr.includes(value))
+      arr = arr.filter(x => x !== value)
+    else
+      arr.push(value)
+
+    setSelected({ ...selected, [key]: arr })
+    applySelectFilter({ ...selected, [key]: arr })
+  }
+
+  function applySearchFilter() {
+    let ch = search?.toLocaleLowerCase()
+    let items = ProductStateData.filter(x => x.status && (
+      (x.name?.toLocaleLowerCase()?.includes(ch)) ||
+      (x.maincategory?.toLocaleLowerCase() === ch) ||
+      (x.subcategory?.toLocaleLowerCase() === ch) ||
+      (x.brand?.toLocaleLowerCase() === ch) ||
+      (x.color?.includes(ch)) ||
+      (x.description?.toLocaleLowerCase()?.includes(ch))
+    ))
+    setSelected({
+      maincategory: [],
+      subcategory: [],
+      brand: [],
+      color: [],
+      size: [],
+    })
+    applySortFilter(sortFilter, items)
+  }
+
+  function applySelectFilter(selected) {
+    let items = ProductStateData.filter(x => x.status && (
+      (selected.maincategory?.length === 0 || selected.maincategory?.includes(x.maincategory)) &&
+      (selected.subcategory?.length === 0 || selected.subcategory?.includes(x.subcategory)) &&
+      (selected.brand?.length === 0 || selected.brand?.includes(x.brand)) &&
+      (selected.color?.length === 0 || new Set(selected.color).intersection(new Set(x.color)).size > 0) &&
+      (selected.size?.length === 0 || new Set(selected.size).intersection(new Set(x.size)).size > 0)
+    ))
+    setSearch("")
+    applySortFilter(sortFilter, items)
+  }
+
+  function applySortFilter(filter, data) {
+    if (min !== -1 && max !== -1)
+      data = data.filter(x => x.finalPrice >= min && x.finalPrice <= max)
+    if (filter === "Latest")
+      setData(data.sort((x, y) => y.id.localeCompare(x.id)))
+    else if (filter === "Price : Low to high")
+      setData(data.sort((x, y) => x.finalPrice - y.finalPrice))
+    else
+      setData(data.sort((x, y) => y.finalPrice - x.finalPrice))
+
+    setTotalProducts(data.length)
+    setSortFilter(filter)
+  }
+
+
+
   useEffect(() => {
-    (() => {
-      dispatch(getMainCategory())
-      if (MaincategoryStateData.length && ProductStateData.length) {
-        setMaincategory(MaincategoryStateData.filter(x => x.status && ProductStateData.filter(p => p.status && p.maincategory === x.name).length))
-      }
-    })()
-  }, [MaincategoryStateData.length, ProductStateData.length])
+    (() => dispatch(getMainCategory()))()
+  }, [MaincategoryStateData.length])
+
+  useEffect(() => {
+    (() => dispatch(getSubCategory()))()
+  }, [SubcategoryStateData.length])
+
+  useEffect(() => {
+    (() => dispatch(getBrand()))()
+  }, [BrandStateData.length])
 
   useEffect(() => {
     (() => {
       dispatch(getProduct())
       if (ProductStateData.length) {
-        setData(ProductStateData[0])
+        let items = ProductStateData.filter(x => x.status)
+        setTotalProducts(items.length)
+        setData(items)
       }
     })()
   }, [ProductStateData.length])
+
+  useEffect(() => {
+    setStartIndex((page - 1) * 24)
+    setEndIndex((page - 1) * 24 + 24)
+  }, [page])
   return (
     <>
-      <div className="container-fluid carousel bg-light px-0">
-        <div className="row g-0 justify-content-end">
-          <div className="col-12 col-lg-7 col-xl-9">
-            <div className="header-carousel bg-light py-5">
-              <Swiper {...sliderOptions}>
-                <SwiperSlide>
-                  <div className="row g-0 header-carousel-item align-items-center">
-                    <div className="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                      <img src="img/carousel-1.png" className="img-fluid w-100" alt="Image" />
-                    </div>
-                    <div className="col-xl-6 carousel-content p-4">
-                      <h4 className="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
-                        style={{ letterSpacing: "3px" }}>Save Up To 90%</h4>
-                      <h1 className="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">On Selected
-                        Electronics Products</h1>
-                      <p className="text-dark wow fadeInRight" data-wow-delay="0.5s">Terms and Condition Apply</p>
-                      <Link className="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
-                        to="/shop">Shop Now</Link>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="row g-0 header-carousel-item align-items-center">
-                    <div className="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
-                      <img src="img/carousel-2.png" className="img-fluid w-100" alt="Image" />
-                    </div>
-                    <div className="col-xl-6 carousel-content p-4">
-                      <h4 className="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
-                        style={{ letterSpacing: "3px" }}>Save Up To 95%</h4>
-                      <h1 className="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">On Selected
-                        Top brand Cloths and Other Products</h1>
-                      <p className="text-dark wow fadeInRight" data-wow-delay="0.5s">Terms and Condition Apply</p>
-                      <Link className="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
-                        to="/shop">Shop Now</Link>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              </Swiper>
-            </div>
-          </div>
-          <div className="col-12 col-lg-5 col-xl-3 wow fadeInRight" data-wow-delay="0.1s">
-            <div className="carousel-header-banner h-100">
-              <img src={`${import.meta.env.VITE_APP_IMAGE_SERVER}${data.pic[0]}`} className="img-fluid w-100 h-100" style={{ objectFit: "cover" }} alt="Image" />
-              <div className="carousel-banner-offer">
-                <p className="bg-primary text-white rounded fs-5 py-2 px-4 mb-0 me-3">Save &#8377;{data.basePrice - data.finalPrice}</p>
-                <p className="text-light fs-5 fw-bold mb-0">{data.discount}% Off</p>
+      <Breadcrum title="Shop" />
+      <div className="container-fluid shop py-5">
+        <div className="container py-5">
+          <div className="row g-4">
+            <div className="col-lg-3 wow fadeInUp" data-wow-delay="0.1s">
+              <div className="product-categories mb-2">
+                <h5>Maincategory</h5>
+                <ul className="list-unstyled">
+                  {MaincategoryStateData.filter(x => x.status).map((item, index) => {
+                    return <li key={index}>
+                      <div className="d-flex">
+                        <span onClick={() => getInputSelected('maincategory', item.name)} className="btn btn-light w-100 text-start">{item.name}</span>
+                        {selected.maincategory.includes(item.name) ? <i className='bi bi-check'></i> : null}
+                      </div>
+                    </li>
+                  })}
+                </ul>
               </div>
-              <div className="carousel-banner">
-                <div className="carousel-banner-content text-center p-4">
-                  <Link to={`/shop?mc=${data?.maincategory}`} className="text-light d-block mb-2">{data?.maincategory}</Link>
-                  <Link to={`/product/${data.id}`} className="d-block text-white fs-3">{data.name}</Link>
-                  <del className="me-2 text-white fs-5">&#8377;{data.basePrice}</del>
-                  <span className="text-light fs-5">&#8377;{data.finalPrice}</span>
+              <div className="product-categories mb-2">
+                <h5>Subcategory</h5>
+                <ul className="list-unstyled">
+                  {SubcategoryStateData.filter(x => x.status).map((item, index) => {
+                    return <li key={index}>
+                      <div className="d-flex">
+                        <span onClick={() => getInputSelected('subcategory', item.name)} className="btn btn-light w-100 text-start">{item.name}</span>
+                        {selected.subcategory.includes(item.name) ? <i className='bi bi-check'></i> : null}
+                      </div>
+                    </li>
+                  })}
+                </ul>
+              </div>
+              <div className="product-categories mb-2">
+                <h5>Brand</h5>
+                <ul className="list-unstyled">
+                  {BrandStateData.filter(x => x.status).map((item, index) => {
+                    return <li key={index}>
+                      <div className="d-flex">
+                        <span onClick={() => getInputSelected('brand', item.name)} className="btn btn-light w-100 text-start">{item.name}</span>
+                        {selected.brand.includes(item.name) ? <i className='bi bi-check'></i> : null}
+                      </div>
+                    </li>
+                  })}
+                </ul>
+              </div>
+
+              <div className="product-color mb-3">
+                <h5>Select By Color</h5>
+                <ul className="list-unstyled">
+                  {colors.map((item, index) => {
+                    return <li key={index}>
+                      <div className="d-flex">
+                        <span onClick={() => getInputSelected('color', item)} className="btn btn-light w-100 text-start">{item}</span>
+                        {selected.color.includes(item) ? <i className='bi bi-check'></i> : null}
+                      </div>
+                    </li>
+                  })}
+                </ul>
+              </div>
+              <div className="product-color mb-3">
+                <h5>Select By Size</h5>
+                <ul className="list-unstyled">
+                  {sizes.map((item, index) => {
+                    return <li key={index}>
+                      <div className="d-flex">
+                        <span onClick={() => getInputSelected('size', item)} className="btn btn-light w-100 text-start">{item}</span>
+                        {selected.size.includes(item) ? <i className='bi bi-check'></i> : null}
+                      </div>
+                    </li>
+                  })}
+                </ul>
+              </div>
+              <div className="product-color mb-3">
+                <h5>Filter By Price Range</h5>
+                <form onSubmit={(e) => {
+                  e.preventDefault()
+                  applySortFilter(sortFilter, data)
+                }}>
+                  <div className="row">
+                    <div className="col-6 mb-3">
+                      <label>Min. Amount</label>
+                      <input type="number" name="min" onChange={e => (setMin(e.target.value))} placeholder='Min. Amount' className='form-control border-primary' />
+                    </div>
+                    <div className="col-6 mb-3">
+                      <label>Min. Amount</label>
+                      <input type="number" name="max" onChange={e => (setMax(e.target.value))} placeholder='Max. Amount' className='form-control border-primary' />
+                    </div>
+                    <div className="col-12 mb-3">
+                      <button type="submit" className='btn btn-primary w-100'>Apply Filter</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div className="col-lg-9 wow fadeInUp" data-wow-delay="0.1s">
+              <div className="row g-4">
+                <div className="col-xl-6">
+                  <form onSubmit={(e) => {
+                    e.preventDefault()
+                    applySearchFilter()
+                  }} >
+                    <div className="input-group w-100 mx-auto d-flex">
+                      <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} className="form-control p-3" placeholder="Search Products By Name, Category, Color etc"
+                        aria-describedby="search-icon-1" />
+                      <button type='submit' id="search-icon-1" className="input-group-text p-3"><i
+                        className="fa fa-search"></i></button>
+                    </div>
+                  </form>
                 </div>
-                <Link to={`/product/${data.id}`} className="btn btn-primary rounded-pill py-2 px-4"><i
-                  className="fas fa-shopping-cart me-2"></i> Add To Cart</Link>
+                <div className="col-xl-4 text-end">
+                  <div className="bg-light ps-3 py-3 rounded d-flex justify-content-between">
+                    <label>Sort By:</label>
+                    <select id="electronics" onChange={(e) => applySortFilter(e.target.value, data)} name="electronicslist"
+                      className="border-0 form-select-sm bg-light me-3" form="electronicsform">
+                      <option>Latest</option>
+                      <option>Price : Low to high</option>
+                      <option>Price : High to low</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col-xl-2 d-flex justify-content-center align-items-center">
+                  <ul className="nav nav-pills d-inline-flex text-center py-2 px-2 rounded bg-light mb-4">
+                    <li className="nav-item me-4">
+                      <a className="bg-light" data-bs-toggle="pill" href="#tab-5">
+                        <i className="fas fa-th fs-2 text-primary"></i>
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="bg-light" data-bs-toggle="pill" href="#tab-6">
+                        <i className="fas fa-bars fs-2 text-primary"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="tab-content">
+                <div id="tab-5" className="tab-pane fade show p-0 active">
+                  <div className="row g-4 product">
+                    {data.slice(startIndex, endIndex).map(item => {
+                      return <SingleProduct title="shop" item={item} key={item.id} />
+                    })}
+                  </div>
+                </div>
+                <div id="tab-6" className="products tab-pane fade show p-0">
+                  <div className="row g-4 products-mini">
+                    {data.slice(startIndex, endIndex).map(item => {
+                      return <div className="col-lg-6" key={item.id}>
+                        <SingleProduct2 title="shop" item={item} />
+                      </div>
+                    })}
+                  </div>
+                </div>
+                <div className="col-12 wow fadeInUp" data-wow-delay="0.1s">
+                  <div className="pagination d-flex justify-content-center mt-5">
+                    <a href="#" onClick={() => page > 1 ? setPage(page - 1) : null} className="rounded">&laquo;</a>
+                    {Array.from({ length: Math.floor((totalProducts / 24) + 1) }, (p, index) => (
+                      <a href="#" key={index} onClick={() => setPage(index + 1)} className={`rounded ${page === (index + 1) ? 'active' : ''}`}>{index + 1}</a>
+                    ))}
+                    <a href="#" onClick={() => page < totalProducts ? setPage(page + 1) : null} className="rounded">&raquo;</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Services />
-      <Offer />
-      <Products maincategory={maincategory} data={ProductStateData.filter(x => x.status)} />
       <SaleBanner />
-      {maincategory.map(item => {
-        return <ProductSlider key={item.id} maincategory={item.name} data={ProductStateData.filter(p => p.status && p.maincategory === item.name)} />
-      })}
-      <BestSellerProducts data={ProductStateData.filter(x => x.status).slice(0, 24)} />
     </>
   )
 }
