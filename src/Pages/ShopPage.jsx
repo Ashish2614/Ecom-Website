@@ -2,6 +2,7 @@ import React from 'react'
 
 import SaleBanner from '../Components/SaleBanner'
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 import { Link } from 'react-router-dom'
 import Services from '../Components/Services'
@@ -40,6 +41,8 @@ export default function ShopPage() {
   let [endIndex, setEndIndex] = useState(0)
   let [totalProducts, setTotalProducts] = useState(0)
 
+  let [searchParams] = useSearchParams()
+
   let [selected, setSelected] = useState({
     maincategory: [],
     subcategory: [],
@@ -66,8 +69,8 @@ export default function ShopPage() {
     applySelectFilter({ ...selected, [key]: arr })
   }
 
-  function applySearchFilter() {
-    let ch = search?.toLocaleLowerCase()
+  function applySearchFilter(option = null) {
+    let ch = option ? option?.toLocaleLowerCase() : search?.toLocaleLowerCase()
     let items = ProductStateData.filter(x => x.status && (
       (x.name?.toLocaleLowerCase()?.includes(ch)) ||
       (x.maincategory?.toLocaleLowerCase() === ch) ||
@@ -141,6 +144,20 @@ export default function ShopPage() {
     setStartIndex((page - 1) * 24)
     setEndIndex((page - 1) * 24 + 24)
   }, [page])
+
+  useEffect(() => {
+    if (searchParams.get("search"))
+      applySearchFilter(searchParams.get("search"))
+    else {
+      let selectItems = {
+        maincategory: searchParams.get("mc") || "",
+        subcategory: searchParams.get("sc") || "",
+        brand: searchParams.get("br") || ""
+      }
+      setSelected({ ...selected, ...selectItems })
+      applySelectFilter({ ...selected, ...selectItems })
+    }
+  }, [searchParams])
   return (
     <>
       <Breadcrum title="Shop" />

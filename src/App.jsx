@@ -4,6 +4,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
 
+import SignupPage from './Pages/User/SignupPage'
+
 import HomePage from './Pages/HomePage'
 import ShopPage from './Pages/ShopPage'
 import ProductPage from './Pages/ProductPage'

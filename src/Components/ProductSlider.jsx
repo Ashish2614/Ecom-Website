@@ -1,7 +1,7 @@
 import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay } from 'swiper/modules';
 import "swiper/css";
-import { Autoplay } from 'swiper/modules'
 import SingleProduct2 from './SingleProduct2';
 
 const sliderOptions = {
@@ -14,11 +14,7 @@ const sliderOptions = {
     768: {
       slidesPerView: 2,
       spaceBetween: 10,
-    },
-    1024: {
-      slidesPerView: 3,
-      spaceBetween: 10,
-    },
+    }
   },
   autoplay: {
     delay: 2000,

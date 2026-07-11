@@ -4,6 +4,8 @@ export default function TextValidators(e) {
   let { value, name } = e.target
   switch (name) {
     case "name":
+    case "email":
+    case "username":
     case "icon":
     case "question":
       if (!value || value.length === 0)
@@ -13,27 +15,39 @@ export default function TextValidators(e) {
       else
         return ""
 
+    case "phone":
+      if (!value || value.length === 0)
+        return name + " Field is Mendatory"
+      else if (value.length < 10 || value.length > 10)
+        return "Invalid Phone Number, Phone Number Should Be 10 Digits"
+      else if (!["6", "7", "8", "9"].includes(value[0]))
+        return "Invalid Phone Number, Phone Number Must Start With 6,7,8,9"
+      else
+        return ""
+
     case "basePrice":
       if (!value || value.length === 0)
         return name + " Field is Mendatory"
       else if (parseInt(value) < 1)
-        return " Price Field Length Must Be 1 or more"
+        return "Price Field Length Be 1 or More"
       else
         return ""
+
 
     case "stockQuantity":
       if (!value || value.length === 0)
         return name + " Field is Mendatory"
       else if (parseInt(value) < 0)
-        return " Stock Quantity Field Length Must Be 0 or more"
+        return "Stock Quantity Field Length Be 0 or More"
       else
         return ""
+
 
     case "discount":
       if (!value || value.length === 0)
         return name + " Field is Mendatory"
       else if (parseInt(value) < 0 || parseInt(value) > 100)
-        return "Discount Field  Must Be 0-100"
+        return "Discount Field Value Must Be 0-100"
       else
         return ""
 
@@ -45,6 +59,7 @@ export default function TextValidators(e) {
         return name + " Field Length Must Be 20-1000"
       else
         return ""
+
 
     default:
       return ""
