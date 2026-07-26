@@ -3,7 +3,7 @@ import Breadcrum from '../../Components/Breadcrum'
 import AdminSidebar from '../../Components/Admin/AdminSidebar'
 import Profile from '../../Components/User/Profile'
 
-export default function AdminHomePages() {
+export default function AdminHomePage() {
   return (
     <>
       <Breadcrum title="Admin" />

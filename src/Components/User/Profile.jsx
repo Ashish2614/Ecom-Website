@@ -1,35 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Profile() {
+  let [data, setData] = useState({})
+  let navigate = useNavigate()
+
+  useEffect(() => {
+    (async () => {
+      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/user/${localStorage.getItem("userid")}`, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+      response = await response.json()
+      if (response)
+        setData(response)
+      else
+        navigate("/login")
+    })()
+  }, [])
   return (
     <>
       <table className='table table-bordered text-dark'>
         <tbody>
           <tr>
             <th>Name</th>
-            <td>Ashish K Tripathi</td>
+            <td>{data.name}</td>
           </tr>
           <tr>
-            <th>username</th>
-            <td>ashish</td>
-
+            <th>Username</th>
+            <td>{data.username}</td>
           </tr>
           <tr>
             <th>Email</th>
-            <td>ashishtring@gmail.com</td>
+            <td>{data.email}</td>
           </tr>
           <tr>
             <th>Phone</th>
-            <td>8004485646</td>
+            <td>{data.phone}</td>
           </tr>
           <tr>
             <th>Role</th>
-            <td>Super Admin</td>
+            <td>{data.role}</td>
           </tr>
         </tbody>
       </table>
-
-
     </>
   )
 }

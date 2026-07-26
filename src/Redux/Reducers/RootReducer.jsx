@@ -5,7 +5,14 @@ import BrandReducer from "./BrandReducer";
 import ProductReducer from "./ProductReducer";
 import FeatureReducer from "./FeatureReducer";
 import FaqReducer from "./FaqReducer";
+import CartReducer from "./CartReducer";
 import SettingReducer from "./SettingReducer";
+import WishlistReducer from "./WishlistReducer";
+import CheckoutReducer from "./CheckoutReducer";
+import TestimonialReducer from "./TestimonialReducer";
+import NewsletterReducer from "./NewsletterReducer";
+import ContactUsReducer from "./ContactUsReducer";
+import UserReducer from "./UserReducer";
 
 export default combineReducers({
   MaincategoryStateData: MaincategoryReducer,
@@ -15,5 +22,13 @@ export default combineReducers({
   FeatureStateData: FeatureReducer,
   FaqStateData: FaqReducer,
   SettingStateData: SettingReducer,
+  CartStateData: CartReducer,
+  WishlistStateData: WishlistReducer,
+  CheckoutStateData: CheckoutReducer,
+  TestimonialStateData: TestimonialReducer,
+  NewsletterStateData: NewsletterReducer,
+  UserStateData: UserReducer,
+  ContactUsStateData: ContactUsReducer,
+
 
 })

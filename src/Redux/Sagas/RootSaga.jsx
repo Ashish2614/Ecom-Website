@@ -5,7 +5,15 @@ import BrandSaga from "./BrandSagas";
 import ProductSaga from "./ProductSagas";
 import FeatureSaga from "./FeatureSagas";
 import FaqSaga from "./FaqSagas";
+import CartSaga from "./CartSagas";
 import SettingSaga from "./SettingSagas";
+import WishlistSaga from "./WishlistSagas";
+import CheckoutSaga from "./CheckoutSagas";
+import TestimonialSaga from "./TestimonialSagas";
+import NewsletterSaga from "./NewsletterSagas";
+import ContactUsSaga from "./ContactUsSagas";
+import UserSaga from "./UserSagas";
+
 
 export default function* RootSaga() {
   yield all([
@@ -16,6 +24,13 @@ export default function* RootSaga() {
     FeatureSaga(),
     FaqSaga(),
     SettingSaga(),
+    CartSaga(),
+    WishlistSaga(),
+    CheckoutSaga(),
+    TestimonialSaga(),
+    NewsletterSaga(),
+    ContactUsSaga(),
+    UserSaga(),
 
   ])
 }
