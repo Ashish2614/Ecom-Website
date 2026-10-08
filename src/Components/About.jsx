@@ -10,7 +10,7 @@ export default function About() {
     siteName: import.meta.env.VITE_APP_SITE_NAME,
     facebook: import.meta.env.VITE_APP_FACEBOOK,
     twitter: import.meta.env.VITE_APP_TWITTER,
-    instagram: import.meta.env.VITE_APP_INSTAGRM,
+    instagram: import.meta.env.VITE_APP_INSTAGRAM,
     linkedin: import.meta.env.VITE_APP_LINKEDIN,
     youtube: import.meta.env.VITE_APP_YOUTUBE,
   })

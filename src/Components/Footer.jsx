@@ -14,7 +14,7 @@ export default function Footer() {
     email: import.meta.env.VITE_APP_EMAIL,
     phone: import.meta.env.VITE_APP_PHONE,
     whatsapp: import.meta.env.VITE_APP_WHATSAPP,
-    facebook: import.meta.env.VITE_APP_FAECBOOK,
+    facebook: import.meta.env.VITE_APP_FACEBOOK,
     twitter: import.meta.env.VITE_APP_TWITTER,
     youtube: import.meta.env.VITE_APP_YOUTUBE,
     linkedin: import.meta.env.VITE_APP_LINKEDIN,
